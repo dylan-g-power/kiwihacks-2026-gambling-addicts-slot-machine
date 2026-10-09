@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://cp3obqtric76y" path="res://sprites_aliens0.png" id="11_l5dsx"]
 [ext_resource type="Script" uid="uid://cgnnsgypg5c1g" path="res://customerscript.gd" id="12_trqcu"]
 [ext_resource type="Texture2D" uid="uid://b7b61ukujrvwl" path="res://shitty background.png" id="13_obrmr"]
+[ext_resource type="Script" uid="uid://dm408sqgpju11" path="res://label.gd" id="14_36ujt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6sj1v"]
 size = Vector2(31, 21)
@@ -53,7 +54,7 @@ position = Vector2(-426, 31)
 position = Vector2(-10, 58)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=446888187]
-position = Vector2(-499.00003, 266)
+position = Vector2(-444, 357)
 scale = Vector2(3, 3)
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1098305933]
@@ -72,6 +73,7 @@ shape = SubResource("RectangleShape2D_8tn5n")
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=485729552]
 position = Vector2(-468, -246)
+scale = Vector2(2, 2)
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D2" unique_id=843075098]
 scale = Vector2(3, 3)
@@ -94,5 +96,15 @@ visibility_layer = 512
 position = Vector2(-54, -16)
 texture = ExtResource("13_obrmr")
 
+[node name="Label" type="Label" parent="." unique_id=1211050207]
+offset_left = 204.0
+offset_top = 358.0
+offset_right = 264.0
+offset_bottom = 381.0
+scale = Vector2(2.639999, 2.1599998)
+text = "score: 0"
+script = ExtResource("14_36ujt")
+
 [connection signal="body_entered" from="StaticBody2D/Area2D" to="StaticBody2D/Sprite2D" method="_on_area_2d_body_entered"]
+[connection signal="burgerserved" from="StaticBody2D2/Sprite2D" to="Label" method="_on_sprite_2d_burgerserved"]
 [connection signal="body_entered" from="StaticBody2D2/Area2D" to="StaticBody2D2/Sprite2D" method="_on_area_2d_body_entered"]
