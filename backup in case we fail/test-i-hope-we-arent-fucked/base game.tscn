@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://btb4p5njh1pxw" path="res://burger/models/tomato.tscn" id="11_jqjih"]
 [ext_resource type="Texture2D" uid="uid://cp3obqtric76y" path="res://sprites_aliens0.png" id="11_l5dsx"]
 [ext_resource type="Script" uid="uid://cgnnsgypg5c1g" path="res://customerscript.gd" id="12_trqcu"]
+[ext_resource type="Texture2D" uid="uid://b7b61ukujrvwl" path="res://shitty background.png" id="13_obrmr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6sj1v"]
 size = Vector2(31, 21)
@@ -52,7 +53,8 @@ position = Vector2(-426, 31)
 position = Vector2(-10, 58)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=446888187]
-position = Vector2(-553, 273)
+position = Vector2(-499.00003, 266)
+scale = Vector2(3, 3)
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1098305933]
 texture = ExtResource("9_q7vdi")
@@ -85,6 +87,12 @@ shape = SubResource("RectangleShape2D_q7vdi")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=1525070703]
 position = Vector2(-0.5, -5)
 shape = SubResource("RectangleShape2D_l5dsx")
+
+[node name="ShittyBackground" type="Sprite2D" parent="." unique_id=2001154939]
+show_behind_parent = true
+visibility_layer = 512
+position = Vector2(-54, -16)
+texture = ExtResource("13_obrmr")
 
 [connection signal="body_entered" from="StaticBody2D/Area2D" to="StaticBody2D/Sprite2D" method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="StaticBody2D2/Area2D" to="StaticBody2D2/Sprite2D" method="_on_area_2d_body_entered"]
