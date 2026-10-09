@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://brfth6wq8supv"]
 
-[ext_resource type="Script" uid="uid://bljrp4ckv37i8" path="res://objectszerog.gd" id="1_pgvkl"]
+[ext_resource type="Script" uid="uid://duq6fahssx280" path="res://burger/scripts/lettuce.gd" id="1_pgvkl"]
 [ext_resource type="Texture2D" uid="uid://bn36m25ik4b5" path="res://burger/sprites/burgers08.png" id="2_pgvkl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6sj1v"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcgfwsg85ie8k"
-path="res://.godot/imported/burgers05.png-b1cfd5773a8a6f9775a0248b5454cafe.ctex"
+uid="uid://dafq0hgu6l7sp"
+path="res://.godot/imported/burger-15.png.png-83603fe6364c83090e9942d6500fbd77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://burger/sprites/burgers05.png"
-dest_files=["res://.godot/imported/burgers05.png-b1cfd5773a8a6f9775a0248b5454cafe.ctex"]
+source_file="res://burger/sprites/burger-15.png.png"
+dest_files=["res://.godot/imported/burger-15.png.png-83603fe6364c83090e9942d6500fbd77.ctex"]
 
 [params]
 

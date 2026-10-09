@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvmv5ytebkh2m"]
 
-[ext_resource type="Script" uid="uid://bljrp4ckv37i8" path="res://objectszerog.gd" id="1_ru0qn"]
+[ext_resource type="Script" uid="uid://dvjh133xdfe0v" path="res://burger/scripts/patty.gd" id="1_ru0qn"]
 [ext_resource type="Texture2D" uid="uid://s6r05l8hraay" path="res://burger/sprites/burgers11.png" id="2_ru0qn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6sj1v"]
