@@ -1,0 +1,6 @@
+[submodule "LilyGo-EPD47"]
+	path = LilyGo-EPD47
+	url = https://github.com/Xinyuan-LilyGO/LilyGo-EPD47
+[submodule "T-Display-S3"]
+	path = T-Display-S3
+	url = https://github.com/Xinyuan-LilyGO/T-Display-S3.git
