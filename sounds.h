@@ -1,7 +1,11 @@
 #ifndef SLOT_SOUNDS_H
 #define SLOT_SOUNDS_H
 
-// Non-blocking buzzer player. Include in your main sketch:
+// Non-blocking buzzer player for Arduino piezo buzzers.
+//
+// Hardware Pin: Connected to Analog Pin A5 by default (can be overridden before include).
+//
+// Usage in your main sketch:
 //
 //   #include "sounds.h"
 //
@@ -10,53 +14,110 @@
 //   }
 //
 //   void loop() {
-//     updateSounds();         // required every loop
-//     playTetrisTheme();      // idle music (loops)
-//     playGambleChorus();     // spinning / tension (plays once)
-//     playBigWin();           // jackpot sting (plays once)
-//     playLoseSound();        // defeat sting (plays once)
+//     updateSounds();              // Required every loop iteration
+//
+//     // Trigger any sound non-blockingly:
+//     // playTetrisTheme();         // Idle background music (loops)
+//     // playGambleTheme();         // Short tension theme (loops)
+//     // playLongGamblingChorus();  // Rolling suspense chorus (plays once)
+//     // playBigWin();              // Jackpot fanfare (plays once)
+//     // playLoseSound();           // Defeat sting (plays once)
+//     // stopSound();               // Stop whatever is playing immediately
 //   }
 //
-// Start functions never delay(). Playback is advanced by updateSounds().
-// Starting one song cancels whichever was playing.
+// None of the play* functions block or use delay(). Starting a new sound
+// seamlessly cancels and replaces the previous one.
 
 #include <Arduino.h>
 
 #ifndef BUZZER_PIN
-#define BUZZER_PIN 7
+#define BUZZER_PIN A5
 #endif
 
 #ifndef REST
 #define REST 0
 #endif
 
+// Note frequencies (Hz)
 #ifndef NOTE_GS3
 #define NOTE_GS3 208
+#endif
+#ifndef NOTE_A3
 #define NOTE_A3  220
+#endif
+#ifndef NOTE_B3
 #define NOTE_B3  247
+#endif
+#ifndef NOTE_C4
 #define NOTE_C4  262
+#endif
+#ifndef NOTE_D4
 #define NOTE_D4  294
+#endif
+#ifndef NOTE_DS4
 #define NOTE_DS4 311
+#endif
+#ifndef NOTE_E4
 #define NOTE_E4  330
+#endif
+#ifndef NOTE_F4
 #define NOTE_F4  349
+#endif
+#ifndef NOTE_G4
 #define NOTE_G4  392
+#endif
+#ifndef NOTE_GS4
 #define NOTE_GS4 415
+#endif
+#ifndef NOTE_A4
 #define NOTE_A4  440
+#endif
+#ifndef NOTE_B4
 #define NOTE_B4  494
+#endif
+#ifndef NOTE_C5
 #define NOTE_C5  523
+#endif
+#ifndef NOTE_D5
 #define NOTE_D5  587
+#endif
+#ifndef NOTE_E5
 #define NOTE_E5  659
+#endif
+#ifndef NOTE_F5
 #define NOTE_F5  698
+#endif
+#ifndef NOTE_G5
 #define NOTE_G5  784
+#endif
+#ifndef NOTE_GS5
 #define NOTE_GS5 831
+#endif
+#ifndef NOTE_A5
 #define NOTE_A5  880
+#endif
+#ifndef NOTE_B5
 #define NOTE_B5  988
+#endif
+#ifndef NOTE_C6
 #define NOTE_C6  1046
+#endif
+#ifndef NOTE_D6
 #define NOTE_D6  1175
+#endif
+#ifndef NOTE_E6
 #define NOTE_E6  1318
+#endif
+#ifndef NOTE_F6
 #define NOTE_F6  1397
+#endif
+#ifndef NOTE_G6
 #define NOTE_G6  1568
+#endif
+#ifndef NOTE_A6
 #define NOTE_A6  1760
+#endif
+#ifndef NOTE_C7
 #define NOTE_C7  2093
 #endif
 
@@ -65,6 +126,7 @@ enum SoundId {
   SOUND_TETRIS,
   SOUND_GAMBLE,
   SOUND_BIG_WIN,
+  SOUND_GAMBLING_CHORUS,
   SOUND_LOSE
 };
 
@@ -88,16 +150,15 @@ inline SoundPlayer& soundPlayer() {
   return player;
 }
 
+// --- Melody Definitions ---
+
+inline const SoundNote* tetrisNotes(uint16_t& count) {
+  static const SoundNote notes[] = {
 #define TNOTE(freq, div) { (freq), \
     (uint16_t)((((div) > 0) ? ((60000L * 4) / 144 / (div)) \
                             : ((60000L * 4) / 144 / -(div)) * 3 / 2) * 9 / 10), \
     (uint16_t)(((div) > 0) ? ((60000L * 4) / 144 / (div)) \
                            : ((60000L * 4) / 144 / -(div)) * 3 / 2) }
-#define BNOTE(freq, toneMs, gap) { (freq), (uint16_t)(toneMs), (uint16_t)((toneMs) * (gap)) }
-#define PAUSE(ms) { REST, 0, (uint16_t)(ms) }
-
-inline const SoundNote* tetrisNotes(uint16_t& count) {
-  static const SoundNote notes[] = {
     TNOTE(NOTE_E5, 4), TNOTE(NOTE_B4, 8), TNOTE(NOTE_C5, 8), TNOTE(NOTE_D5, 4), TNOTE(NOTE_C5, 8), TNOTE(NOTE_B4, 8),
     TNOTE(NOTE_A4, 4), TNOTE(NOTE_A4, 8), TNOTE(NOTE_C5, 8), TNOTE(NOTE_E5, 4), TNOTE(NOTE_D5, 8), TNOTE(NOTE_C5, 8),
     TNOTE(NOTE_B4, -4), TNOTE(NOTE_C5, 8), TNOTE(NOTE_D5, 4), TNOTE(NOTE_E5, 4),
@@ -116,12 +177,14 @@ inline const SoundNote* tetrisNotes(uint16_t& count) {
     TNOTE(NOTE_D5, 2), TNOTE(NOTE_B4, 2),
     TNOTE(NOTE_C5, 4), TNOTE(NOTE_E5, 4), TNOTE(NOTE_A5, 2),
     TNOTE(NOTE_GS5, 2)
+#undef TNOTE
   };
   count = sizeof(notes) / sizeof(notes[0]);
   return notes;
 }
 
 inline const SoundNote* bigWinNotes(uint16_t& count) {
+#define BNOTE(freq, tone, gap) { (freq), (uint16_t)(tone), (uint16_t)((tone) * (gap)) }
   static const SoundNote notes[] = {
     BNOTE(NOTE_C5, 45, 1.15f), BNOTE(NOTE_D5, 45, 1.15f), BNOTE(NOTE_E5, 45, 1.15f),
     BNOTE(NOTE_G5, 45, 1.15f), BNOTE(NOTE_A5, 45, 1.15f), BNOTE(NOTE_C6, 45, 1.15f),
@@ -135,60 +198,93 @@ inline const SoundNote* bigWinNotes(uint16_t& count) {
 
     BNOTE(NOTE_G6, 100, 1.2f), BNOTE(NOTE_A6, 100, 1.2f), BNOTE(NOTE_C7, 500, 1.2f)
   };
-  count = sizeof(notes) / sizeof(notes[0]);
-  return notes;
-}
-
-// Flattened playLongGamblingChorus(): 6 slowing wheel cycles + suspense hook.
-inline const SoundNote* gambleNotes(uint16_t& count) {
-  static const SoundNote notes[] = {
-    // cycle 0, duration 110
-    BNOTE(NOTE_G4, 110, 1.30f), BNOTE(NOTE_D5, 110, 1.30f), BNOTE(NOTE_B4, 110, 1.30f),
-    BNOTE(NOTE_E5, 110, 1.30f), BNOTE(NOTE_C5, 110, 1.30f), BNOTE(NOTE_G5, 110, 1.30f),
-    PAUSE(100),
-    // cycle 1, duration 125
-    BNOTE(NOTE_G4, 125, 1.30f), BNOTE(NOTE_D5, 125, 1.30f), BNOTE(NOTE_B4, 125, 1.30f),
-    BNOTE(NOTE_E5, 125, 1.30f), BNOTE(NOTE_C5, 125, 1.30f), BNOTE(NOTE_G5, 125, 1.30f),
-    PAUSE(100),
-    // cycle 2, duration 140
-    BNOTE(NOTE_G4, 140, 1.30f), BNOTE(NOTE_D5, 140, 1.30f), BNOTE(NOTE_B4, 140, 1.30f),
-    BNOTE(NOTE_E5, 140, 1.30f), BNOTE(NOTE_C5, 140, 1.30f), BNOTE(NOTE_G5, 140, 1.30f),
-    PAUSE(100),
-    // cycle 3, duration 155, pitch step-up
-    BNOTE(NOTE_C5, 155, 1.30f), BNOTE(NOTE_D5, 155, 1.30f), BNOTE(NOTE_E5, 155, 1.30f),
-    BNOTE(NOTE_E5, 155, 1.30f), BNOTE(NOTE_C5, 155, 1.30f), BNOTE(NOTE_G5, 155, 1.30f),
-    PAUSE(100),
-    // cycle 4, duration 170
-    BNOTE(NOTE_C5, 170, 1.30f), BNOTE(NOTE_D5, 170, 1.30f), BNOTE(NOTE_E5, 170, 1.30f),
-    BNOTE(NOTE_E5, 170, 1.30f), BNOTE(NOTE_C5, 170, 1.30f), BNOTE(NOTE_G5, 170, 1.30f),
-    PAUSE(100),
-    // cycle 5, duration 185, higher hook pitches
-    BNOTE(NOTE_C5, 185, 1.30f), BNOTE(NOTE_D5, 185, 1.30f), BNOTE(NOTE_E5, 185, 1.30f),
-    BNOTE(NOTE_E5, 185, 1.30f), BNOTE(NOTE_A5, 185, 1.30f), BNOTE(NOTE_C6, 185, 1.30f),
-    PAUSE(100),
-    // suspense hook
-    BNOTE(NOTE_A5, 180, 1.4f), BNOTE(NOTE_B5, 180, 1.4f), BNOTE(NOTE_C6, 400, 1.2f)
-  };
-  count = sizeof(notes) / sizeof(notes[0]);
-  return notes;
-}
-
-inline const SoundNote* loseNotes(uint16_t& count) {
-  static const SoundNote notes[] = {
-    BNOTE(NOTE_G4, 120, 1.1f), BNOTE(NOTE_F4, 120, 1.1f),
-    BNOTE(NOTE_E4, 120, 1.1f), BNOTE(NOTE_DS4, 120, 1.1f),
-    PAUSE(100),
-    BNOTE(NOTE_D4, 250, 1.2f), BNOTE(NOTE_C4, 250, 1.2f),
-    BNOTE(NOTE_B3, 250, 1.2f), BNOTE(NOTE_A3, 250, 1.2f),
-    BNOTE(NOTE_GS3, 800, 1.1f)
-  };
-  count = sizeof(notes) / sizeof(notes[0]);
-  return notes;
-}
-
-#undef TNOTE
 #undef BNOTE
-#undef PAUSE
+  count = sizeof(notes) / sizeof(notes[0]);
+  return notes;
+}
+
+inline const SoundNote* gambleNotes(uint16_t& count) {
+#define BNOTE(freq, tone, gap) { (freq), (uint16_t)(tone), (uint16_t)((tone) * (gap)) }
+  static const SoundNote notes[] = {
+    BNOTE(NOTE_C5, 55, 1.12f), BNOTE(NOTE_E5, 55, 1.12f), BNOTE(NOTE_G5, 55, 1.12f), BNOTE(NOTE_C6, 55, 1.12f),
+    BNOTE(NOTE_G5, 50, 1.12f), BNOTE(NOTE_E5, 50, 1.12f),
+    BNOTE(NOTE_D5, 45, 1.10f), BNOTE(NOTE_F5, 45, 1.10f), BNOTE(NOTE_A5, 45, 1.10f), BNOTE(NOTE_D6, 45, 1.10f),
+    BNOTE(NOTE_A5, 40, 1.10f), BNOTE(NOTE_F5, 40, 1.10f),
+    BNOTE(NOTE_E5, 40, 1.08f), BNOTE(NOTE_G5, 40, 1.08f), BNOTE(NOTE_B5, 40, 1.08f), BNOTE(NOTE_E6, 40, 1.08f),
+    BNOTE(NOTE_C6, 70, 1.15f), BNOTE(NOTE_E6, 70, 1.15f), BNOTE(NOTE_G6, 90, 1.20f),
+    BNOTE(NOTE_E6, 50, 1.10f), BNOTE(NOTE_C6, 50, 1.10f), BNOTE(REST, 80, 1.00f)
+  };
+#undef BNOTE
+  count = sizeof(notes) / sizeof(notes[0]);
+  return notes;
+}
+
+// 1. Long Gambling Chorus (Rolling suspense + Cliffhanger hook)
+inline const SoundNote* longGamblingChorusNotes(uint16_t& count) {
+#define GNOTE(freq, dur, pause) { (freq), (uint16_t)(dur), (uint16_t)((uint16_t)((dur) * 1.30f) + (pause)) }
+#define HNOTE(freq, dur, gap)   { (freq), (uint16_t)(dur), (uint16_t)((dur) * (gap)) }
+  static const SoundNote notes[] = {
+    // --- Phase 1: The Extended Rolling Sequence ---
+    // Cycle 0 (duration 110ms)
+    GNOTE(NOTE_G4, 110, 0), GNOTE(NOTE_D5, 110, 0), GNOTE(NOTE_B4, 110, 0),
+    GNOTE(NOTE_E5, 110, 0), GNOTE(NOTE_C5, 110, 0), GNOTE(NOTE_G5, 110, 100),
+
+    // Cycle 1 (duration 125ms)
+    GNOTE(NOTE_G4, 125, 0), GNOTE(NOTE_D5, 125, 0), GNOTE(NOTE_B4, 125, 0),
+    GNOTE(NOTE_E5, 125, 0), GNOTE(NOTE_C5, 125, 0), GNOTE(NOTE_G5, 125, 100),
+
+    // Cycle 2 (duration 140ms)
+    GNOTE(NOTE_G4, 140, 0), GNOTE(NOTE_D5, 140, 0), GNOTE(NOTE_B4, 140, 0),
+    GNOTE(NOTE_E5, 140, 0), GNOTE(NOTE_C5, 140, 0), GNOTE(NOTE_G5, 140, 100),
+
+    // Cycle 3 (duration 155ms - Pitch step-up)
+    GNOTE(NOTE_C5, 155, 0), GNOTE(NOTE_D5, 155, 0), GNOTE(NOTE_E5, 155, 0),
+    GNOTE(NOTE_E5, 155, 0), GNOTE(NOTE_C5, 155, 0), GNOTE(NOTE_G5, 155, 100),
+
+    // Cycle 4 (duration 170ms)
+    GNOTE(NOTE_C5, 170, 0), GNOTE(NOTE_D5, 170, 0), GNOTE(NOTE_E5, 170, 0),
+    GNOTE(NOTE_E5, 170, 0), GNOTE(NOTE_C5, 170, 0), GNOTE(NOTE_G5, 170, 100),
+
+    // Cycle 5 (duration 185ms - Pitch step-up to climax)
+    GNOTE(NOTE_C5, 185, 0), GNOTE(NOTE_D5, 185, 0), GNOTE(NOTE_E5, 185, 0),
+    GNOTE(NOTE_E5, 185, 0), GNOTE(NOTE_A5, 185, 0), GNOTE(NOTE_C6, 185, 100),
+
+    // --- Phase 2: The Slower Suspense Hook ---
+    HNOTE(NOTE_A5, 180, 1.40f),
+    HNOTE(NOTE_B5, 180, 1.40f),
+    HNOTE(NOTE_C6, 400, 1.20f)
+  };
+#undef GNOTE
+#undef HNOTE
+  count = sizeof(notes) / sizeof(notes[0]);
+  return notes;
+}
+
+// 2. Lose Sound (The Shock drop -> Defeat descent -> Flat "wah-wah" finish)
+inline const SoundNote* loseNotes(uint16_t& count) {
+#define LNOTE(freq, tone, gap) { (freq), (uint16_t)(tone), (uint16_t)((tone) * (gap)) }
+  static const SoundNote notes[] = {
+    // Phase 1: The Shock (Quick falling drop)
+    LNOTE(NOTE_G4,  120, 1.10f),
+    LNOTE(NOTE_F4,  120, 1.10f),
+    LNOTE(NOTE_E4,  120, 1.10f),
+    { NOTE_DS4, 120, (uint16_t)((uint16_t)(120 * 1.10f) + 100) }, // Includes dramatic 100ms pause
+
+    // Phase 2: The Defeat Descent (Slower, plodding steps)
+    LNOTE(NOTE_D4,  250, 1.20f),
+    LNOTE(NOTE_C4,  250, 1.20f),
+    LNOTE(NOTE_B3,  250, 1.20f),
+    LNOTE(NOTE_A3,  250, 1.20f),
+
+    // Phase 3: The Ultimate "Wah-Wah" Bottom Out
+    LNOTE(NOTE_GS3, 800, 1.10f)
+  };
+#undef LNOTE
+  count = sizeof(notes) / sizeof(notes[0]);
+  return notes;
+}
+
+// --- Player Core ---
 
 inline void setupBuzzer() {
   pinMode(BUZZER_PIN, OUTPUT);
@@ -223,28 +319,24 @@ inline void startSound(SoundId id, const SoundNote* notes, uint16_t count, bool 
   p.loop = loop;
 }
 
+// --- Playback Triggers ---
+
 inline void playTetrisTheme() {
   if (currentSound() == SOUND_TETRIS) {
     return;
   }
   uint16_t count = 0;
-  startSound(SOUND_TETRIS, tetrisNotes(count), count, true);
+  const SoundNote* notes = tetrisNotes(count);
+  startSound(SOUND_TETRIS, notes, count, true);
 }
 
-inline void playGambleChorus() {
+inline void playGambleTheme() {
   if (currentSound() == SOUND_GAMBLE) {
     return;
   }
   uint16_t count = 0;
-  startSound(SOUND_GAMBLE, gambleNotes(count), count, false);
-}
-
-inline void playLongGamblingChorus() {
-  playGambleChorus();
-}
-
-inline void playGambleTheme() {
-  playGambleChorus();
+  const SoundNote* notes = gambleNotes(count);
+  startSound(SOUND_GAMBLE, notes, count, true);
 }
 
 inline void playBigWin() {
@@ -252,16 +344,33 @@ inline void playBigWin() {
     return;
   }
   uint16_t count = 0;
-  startSound(SOUND_BIG_WIN, bigWinNotes(count), count, false);
+  const SoundNote* notes = bigWinNotes(count);
+  startSound(SOUND_BIG_WIN, notes, count, false);
 }
 
-inline void playLoseSound() {
+inline void playLongGamblingChorus(bool loop = false) {
+  if (currentSound() == SOUND_GAMBLING_CHORUS) {
+    return;
+  }
+  uint16_t count = 0;
+  const SoundNote* notes = longGamblingChorusNotes(count);
+  startSound(SOUND_GAMBLING_CHORUS, notes, count, loop);
+}
+
+inline void playLoseSound(bool loop = false) {
   if (currentSound() == SOUND_LOSE) {
     return;
   }
   uint16_t count = 0;
-  startSound(SOUND_LOSE, loseNotes(count), count, false);
+  const SoundNote* notes = loseNotes(count);
+  startSound(SOUND_LOSE, notes, count, loop);
 }
+
+// Convenient aliases
+inline void playGamblingChorus(bool loop = false) { playLongGamblingChorus(loop); }
+inline void playLoseTheme(bool loop = false)      { playLoseSound(loop); }
+
+// --- Engine Tick ---
 
 inline void updateSounds() {
   SoundPlayer& p = soundPlayer();
@@ -292,4 +401,4 @@ inline void updateSounds() {
   p.nextMs = now + note.stepMs;
 }
 
-#endif
+#endif // SLOT_SOUNDS_H
