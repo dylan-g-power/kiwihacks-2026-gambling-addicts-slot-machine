@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c7kr7ii7l33e3"]
+
+[ext_resource type="Script" uid="uid://k2eijfaawriv" path="res://burger/scripts/stage1.gd" id="1_f6x14"]
+[ext_resource type="Texture2D" uid="uid://cvctfye4ofcrr" path="res://burger/sprites/burger-14.png.png" id="2_qdafm"]
+[ext_resource type="Script" uid="uid://46sw84h5dpeg" path="res://burger/scripts/sprite_2d.gd" id="3_xo1qm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6sj1v"]
+size = Vector2(31, 21)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8tn5n"]
+size = Vector2(30, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=446888187]
+script = ExtResource("1_f6x14")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1098305933]
+texture = ExtResource("2_qdafm")
+script = ExtResource("3_xo1qm")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=435168208]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2076119700]
+position = Vector2(0.5, 6.5)
+shape = SubResource("RectangleShape2D_6sj1v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=849158550]
+position = Vector2(1, 15.5)
+shape = SubResource("RectangleShape2D_8tn5n")
+
+[connection signal="body_entered" from="Area2D" to="Sprite2D" method="_on_area_2d_body_entered"]
