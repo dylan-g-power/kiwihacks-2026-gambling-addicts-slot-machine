@@ -1,5 +1,50 @@
 [gd_scene format=3 uid="uid://bmkguj65ge1gq"]
 
+[ext_resource type="PackedScene" uid="uid://dfbpnrctje6ut" path="res://burger/models/full_burger.tscn" id="1_iklkn"]
+[ext_resource type="PackedScene" uid="uid://c83rwvawg241h" path="res://burger/models/cheese.tscn" id="2_l5dsx"]
+[ext_resource type="PackedScene" uid="uid://neralx85ft5g" path="res://burger/models/crown bun.tscn" id="3_trqcu"]
+[ext_resource type="PackedScene" uid="uid://cpowbyxswt47v" path="res://burger/models/heel bun.tscn" id="4_obrmr"]
+[ext_resource type="PackedScene" uid="uid://brfth6wq8supv" path="res://burger/models/lettuce.tscn" id="5_36ujt"]
+[ext_resource type="PackedScene" uid="uid://dvmv5ytebkh2m" path="res://burger/models/patty.tscn" id="6_ukkl5"]
+[ext_resource type="PackedScene" uid="uid://c272lkhfxn8ee" path="res://burger/models/stage 2.tscn" id="7_kky36"]
+[ext_resource type="PackedScene" uid="uid://do75x3pqtumwa" path="res://burger/models/stage 3.tscn" id="8_jcbtp"]
+[ext_resource type="PackedScene" uid="uid://cyn7rp8dm8igy" path="res://burger/models/stage 4.tscn" id="9_ponkj"]
+[ext_resource type="PackedScene" uid="uid://cg111w0c4ebna" path="res://burger/models/stage 5.tscn" id="10_1rgah"]
+[ext_resource type="PackedScene" uid="uid://btb4p5njh1pxw" path="res://burger/models/tomato.tscn" id="11_jqjih"]
+
 [node name="Node2D" type="Node2D" unique_id=414345611]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=481704571]
+
+[node name="full burger" parent="." unique_id=1877925449 instance=ExtResource("1_iklkn")]
+position = Vector2(-89, -29)
+
+[node name="cheese" parent="." unique_id=1201382054 instance=ExtResource("2_l5dsx")]
+position = Vector2(-326, 73)
+
+[node name="crown bun" parent="." unique_id=30789725 instance=ExtResource("3_trqcu")]
+position = Vector2(-221, 44)
+
+[node name="heel" parent="." unique_id=270427764 instance=ExtResource("4_obrmr")]
+position = Vector2(-174, 129)
+
+[node name="lettuce" parent="." unique_id=888418523 instance=ExtResource("5_36ujt")]
+position = Vector2(-388, 120)
+
+[node name="patty" parent="." unique_id=4246285 instance=ExtResource("6_ukkl5")]
+position = Vector2(-426, 31)
+
+[node name="stage 2" parent="." unique_id=1423478378 instance=ExtResource("7_kky36")]
+position = Vector2(-352, -11)
+
+[node name="stage 3" parent="." unique_id=847419364 instance=ExtResource("8_jcbtp")]
+position = Vector2(-247, -30)
+
+[node name="stage 4" parent="." unique_id=840429589 instance=ExtResource("9_ponkj")]
+position = Vector2(-177, -15)
+
+[node name="stage 5" parent="." unique_id=1967463400 instance=ExtResource("10_1rgah")]
+position = Vector2(-115, 73)
+
+[node name="tomato" parent="." unique_id=201471596 instance=ExtResource("11_jqjih")]
+position = Vector2(-10, 58)

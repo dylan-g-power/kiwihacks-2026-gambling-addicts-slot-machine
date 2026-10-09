@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://neralx85ft5g"]
+
+[ext_resource type="Script" uid="uid://bljrp4ckv37i8" path="res://objectszerog.gd" id="1_kvxqf"]
+[ext_resource type="Texture2D" uid="uid://cdeh0npxh4drj" path="res://burger/sprites/burgers07.png" id="2_kvxqf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6sj1v"]
+size = Vector2(36, 13)
+
+[node name="crown bun" type="RigidBody2D" unique_id=1877925449]
+script = ExtResource("1_kvxqf")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1883222916]
+texture = ExtResource("2_kvxqf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=898116310]
+position = Vector2(0, -11.5)
+shape = SubResource("RectangleShape2D_6sj1v")

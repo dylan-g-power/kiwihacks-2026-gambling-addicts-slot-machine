@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cyn7rp8dm8igy"]
+
+[ext_resource type="Script" uid="uid://bljrp4ckv37i8" path="res://objectszerog.gd" id="1_05x0y"]
+[ext_resource type="Texture2D" uid="uid://b2utfkxpv6huy" path="res://burger/sprites/burgers02.png" id="2_05x0y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6sj1v"]
+size = Vector2(36, 25)
+
+[node name="stage 4" type="RigidBody2D" unique_id=1877925449]
+script = ExtResource("1_05x0y")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1883222916]
+texture = ExtResource("2_05x0y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=898116310]
+position = Vector2(0, 7.5)
+shape = SubResource("RectangleShape2D_6sj1v")
